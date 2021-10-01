@@ -1,3 +1,5 @@
+package task02methodgauss
+
 import org.jetbrains.kotlinx.multik.ndarray.data.D1Array
 import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
 import org.jetbrains.kotlinx.multik.ndarray.data.get
@@ -36,7 +38,8 @@ fun solveSystemOfLinearEquationsGauss(inputMatrix: D2Array<Double>, inputVector:
     for (selectedRowIndex in 0 until size) {
         vector[selectedRowIndex] /= matrix[selectedRowIndex, selectedRowIndex]
     }
-
+    println("Calculated vector X:")
+    println(vector)
     return vector
 }
 
