@@ -1,6 +1,6 @@
-import task02methodgauss.calcVectorDiff
-import task02methodgauss.generateSystemOfLinearEquations
-import task02methodgauss.solveSystemOfLinearEquationsGauss
+import ru.lihogub.task02methodgauss.calcVectorDiff
+import ru.lihogub.common.generateSystemOfLinearEquations
+import ru.lihogub.task02methodgauss.solveSystemOfLinearEquationsGauss
 
 fun main() {
     val generatedAXB = generateSystemOfLinearEquations(10000)

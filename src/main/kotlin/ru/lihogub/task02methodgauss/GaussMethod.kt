@@ -1,4 +1,4 @@
-package task02methodgauss
+package ru.lihogub.task02methodgauss
 
 import org.jetbrains.kotlinx.multik.ndarray.data.D1Array
 import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
