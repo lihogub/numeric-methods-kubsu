@@ -59,7 +59,7 @@ fun solveSystemOfLinearEquationsJacobi(matrixA: D2Array<Double>, vectorB: D1Arra
         i++
     } while (inaccuracy > epsilon)
 
-    println("Iterations: $i, \nInaccuracy: $inaccuracy")
+    println("Iterations: \n$i")
 
 //    println("U: \n$matrixU")
 //    println("L: \n$matrixL")
