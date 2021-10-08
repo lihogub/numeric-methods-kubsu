@@ -6,13 +6,13 @@ import org.jetbrains.kotlinx.multik.ndarray.data.D1Array
 import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
 import kotlin.random.Random
 
-fun generateSystemOfLinearEquations(size: Int): Triple<D2Array<Double>, D1Array<Double>, D1Array<Double>> {
-    val matrixARaw = Array(size * size) { Random.nextDouble(0.0, 1000.0) }
+fun generateSystemOfLinearEquations(size: Int, lowerBound: Double, upperBound: Double): Triple<D2Array<Double>, D1Array<Double>, D1Array<Double>> {
+    val matrixARaw = Array(size * size) { Random.nextDouble(lowerBound, upperBound) }
         .toDoubleArray()
 
     val matrixA = mk.ndarray(matrixARaw, size, size)
 
-    val vectorXRaw = Array(size) { Random.nextDouble(0.0, 1000.0) }
+    val vectorXRaw = Array(size) { Random.nextDouble(lowerBound, upperBound) }
         .toDoubleArray()
 
     val vectorX = mk.ndarray(vectorXRaw)
