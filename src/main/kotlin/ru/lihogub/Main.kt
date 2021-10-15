@@ -3,6 +3,7 @@ package ru.lihogub
 import org.jetbrains.kotlinx.multik.ndarray.data.D1Array
 import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
 import ru.lihogub.common.generateSystemOfLinearEquations
+import ru.lihogub.common.generateSystemOfLinearEquationsWithStrongDiagonalDominant
 import ru.lihogub.task02methodgauss.calcVectorDiff
 import ru.lihogub.task02methodgauss.solveSystemOfLinearEquationsGaussWithRowReplace
 import ru.lihogub.task03jacobymethod.isStrictlyDiagonallyDominant
@@ -13,16 +14,12 @@ fun main() {
 }
 
 fun runJacobiMethod() {
-    var generatedAXB: Triple<D2Array<Double>, D1Array<Double>, D1Array<Double>>
-    do {
-        generatedAXB = generateSystemOfLinearEquations(3, 0.0, 1000.0)
-    } while (!isStrictlyDiagonallyDominant(generatedAXB.first))
-
+    val generatedAXB = generateSystemOfLinearEquationsWithStrongDiagonalDominant(50, 0.0, 10.0, 1.001)
 
     println("Matrix A: \n${generatedAXB.first}")
     println("Vector X: \n${generatedAXB.second}")
     println("Vector B: \n${generatedAXB.third}")
-    val computedX = solveSystemOfLinearEquationsJacobi(generatedAXB.first, generatedAXB.third)
+    val computedX = solveSystemOfLinearEquationsJacobi(generatedAXB.first, generatedAXB.third, 10e-5)
     println("Computed X: \n$computedX")
     println("Inaccurance: \n${calcVectorDiff(generatedAXB.second, computedX)}")
 }

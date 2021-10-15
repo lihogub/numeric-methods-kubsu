@@ -28,8 +28,7 @@ import kotlin.math.abs
  *
  * @return vectorX
  */
-fun solveSystemOfLinearEquationsJacobi(matrixA: D2Array<Double>, vectorB: D1Array<Double>): D1Array<Double> {
-    val epsilon = 10e-5
+fun solveSystemOfLinearEquationsJacobi(matrixA: D2Array<Double>, vectorB: D1Array<Double>, epsilon: Double): D1Array<Double> {
     val size = vectorB.size
 
     val matrixU = mk.empty<Double, D2>(size, size)
