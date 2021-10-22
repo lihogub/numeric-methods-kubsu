@@ -1,5 +1,6 @@
 package ru.lihogub.common
 
+import org.jetbrains.kotlinx.multik.api.linalg.dot
 import org.jetbrains.kotlinx.multik.api.mk
 import org.jetbrains.kotlinx.multik.api.ndarray
 import org.jetbrains.kotlinx.multik.ndarray.data.D1Array

@@ -1,13 +1,13 @@
-package ru.lihogub.task03jacobymethod
+package ru.lihogub.task03jacobyseidelmethod
 
 import org.jetbrains.kotlinx.multik.api.*
+import org.jetbrains.kotlinx.multik.api.linalg.dot
 import org.jetbrains.kotlinx.multik.ndarray.data.*
 import org.jetbrains.kotlinx.multik.ndarray.operations.map
 import org.jetbrains.kotlinx.multik.ndarray.operations.minus
 import org.jetbrains.kotlinx.multik.ndarray.operations.plus
 import org.jetbrains.kotlinx.multik.ndarray.operations.times
 import ru.lihogub.task02methodgauss.calcVectorDiff
-import kotlin.math.abs
 
 /**
  * System of linear equations **Ax = b**
@@ -31,13 +31,13 @@ import kotlin.math.abs
 fun solveSystemOfLinearEquationsJacobi(matrixA: D2Array<Double>, vectorB: D1Array<Double>, epsilon: Double): D1Array<Double> {
     val size = vectorB.size
 
-    val matrixU = mk.empty<Double, D2>(size, size)
+    val matrixU = mk.zeros<Double>(size, size)
     for (i in 0 until size)
         for (j in i + 1 until size)
             matrixU[i, j] = matrixA[i, j]
 
 
-    val matrixL = mk.empty<Double, D2>(size, size)
+    val matrixL = mk.zeros<Double>(size, size)
     for (i in 1 until size)
         for (j in 0 until i)
             matrixL[i, j] = matrixA[i, j]
@@ -68,18 +68,4 @@ fun solveSystemOfLinearEquationsJacobi(matrixA: D2Array<Double>, vectorB: D1Arra
 //    println("X: \n$vectorX")
 
     return vectorX
-}
-
-fun isStrictlyDiagonallyDominant(matrixA: D2Array<Double>): Boolean {
-    val size = matrixA.shape[0]
-    for (i in 0 until size) {
-        var sum = 0.0
-        for (j in 0 until size) {
-            sum += abs(matrixA[i, j])
-        }
-        if ((sum - abs(matrixA[i, i])) >= abs(matrixA[i, i])) {
-            return false
-        }
-    }
-    return true
 }
