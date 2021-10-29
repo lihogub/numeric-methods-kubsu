@@ -23,13 +23,13 @@ fun runJacobiMethod() {
 }
 
 fun runSeidelMethod() {
-    val generatedAXB = generateSystemOfLinearEquationsWithStrongDiagonalDominant(50, 0.0, 10.0, 10.0)
+    val generatedAXB = generateSystemOfLinearEquationsWithStrongDiagonalDominant(5000, 0.0, 10.0, 10.0)
 
 //    println("Matrix A: \n${generatedAXB.first}")
-    println("Vector X: \n${generatedAXB.second}")
+//    println("Vector X: \n${generatedAXB.second}")
 //    println("Vector B: \n${generatedAXB.third}")
     val computedX = solveSystemOfLinearEquationsSeidel(generatedAXB.first, generatedAXB.third, 10e-5)
-    println("Computed X: \n$computedX")
+//    println("Computed X: \n$computedX")
     println("Inaccurance: \n${calcVectorDiff(generatedAXB.second, computedX)}")
 }
 

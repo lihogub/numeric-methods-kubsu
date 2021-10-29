@@ -32,12 +32,6 @@ fun solveSystemOfLinearEquationsSeidel(matrixA: D2Array<Double>, vectorB: D1Arra
         for (j in i + 1 until size)
             matrixU[i, j] = matrixA[i, j]
 
-
-    val matrixL = mk.zeros<Double>(size, size)
-    for (i in 1 until size)
-        for (j in 0 until i)
-            matrixL[i, j] = matrixA[i, j]
-
     val matrixLInv = mk.linalg.inv(matrixA - matrixU)
 
     var vectorX = mk.d1array(size) { 0.0 }
