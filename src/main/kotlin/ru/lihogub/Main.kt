@@ -1,45 +1,19 @@
 package ru.lihogub
 
-import ru.lihogub.common.generateSystemOfLinearEquations
-import ru.lihogub.common.generateSystemOfLinearEquationsWithStrongDiagonalDominant
-import ru.lihogub.task02methodgauss.calcVectorDiff
-import ru.lihogub.task02methodgauss.solveSystemOfLinearEquationsGaussWithRowReplace
-import ru.lihogub.task03jacobyseidelmethod.solveSystemOfLinearEquationsJacobi
-import ru.lihogub.task03jacobyseidelmethod.solveSystemOfLinearEquationsSeidel
+import ru.lihogub.common.generateInterpolationNodes
+import ru.lihogub.task04lagrangenewtoninterpolation.interpolateLagrangeMethod
+import ru.lihogub.task04lagrangenewtoninterpolation.interpolateNewtonMethod
+import kotlin.math.*
 
 fun main() {
-    runSeidelMethod()
-}
-
-fun runJacobiMethod() {
-    val generatedAXB = generateSystemOfLinearEquationsWithStrongDiagonalDominant(50, 0.0, 10.0, 10.0)
-
-//    println("Matrix A: \n${generatedAXB.first}")
-    println("Vector X: \n${generatedAXB.second}")
-//    println("Vector B: \n${generatedAXB.third}")
-    val computedX = solveSystemOfLinearEquationsJacobi(generatedAXB.first, generatedAXB.third, 10e-5)
-    println("Computed X: \n$computedX")
-    println("Inaccurance: \n${calcVectorDiff(generatedAXB.second, computedX)}")
-}
-
-fun runSeidelMethod() {
-    val generatedAXB = generateSystemOfLinearEquationsWithStrongDiagonalDominant(5000, 0.0, 10.0, 10.0)
-
-//    println("Matrix A: \n${generatedAXB.first}")
-//    println("Vector X: \n${generatedAXB.second}")
-//    println("Vector B: \n${generatedAXB.third}")
-    val computedX = solveSystemOfLinearEquationsSeidel(generatedAXB.first, generatedAXB.third, 10e-5)
-//    println("Computed X: \n$computedX")
-    println("Inaccurance: \n${calcVectorDiff(generatedAXB.second, computedX)}")
-}
-
-fun runGaussMethod() {
-    val generatedAXB = generateSystemOfLinearEquations(3, 0.0, 1000.0)
-    val computedX = solveSystemOfLinearEquationsGaussWithRowReplace(generatedAXB.first, generatedAXB.third)
-
-    println("Matrix A: \n${generatedAXB.first}")
-    println("Vector X: \n${generatedAXB.second}")
-    println("Vector B: \n${generatedAXB.third}")
-    println("Computed X: \n$computedX")
-    println("Inaccurance: \n${calcVectorDiff(generatedAXB.second, computedX)}")
+    val func: (Double) -> Double = { x -> 1.0 / 5.0}
+    val nodesCount = 10
+    val lowerBound = 0.0
+    val upperBound = 1.0
+    val nodeList = generateInterpolationNodes(nodesCount, lowerBound, upperBound) { func(it) }
+    println(nodeList)
+    val x = 0.1
+    val y = interpolateNewtonMethod(x, nodeList)
+    val y1 = interpolateLagrangeMethod(x, nodeList)
+    println("x=$x, y=$y, y1=$y1, f(x)=${func(x)}, delta=${abs(func(x) - y)}")
 }
