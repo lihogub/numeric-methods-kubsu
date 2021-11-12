@@ -15,11 +15,11 @@ fun interpolateNewtonMethod(x: Double, interpolationNodes: List<Pair<Double, Dou
         }
     }
 
-    var s = 0.0
-    var m = 1.0
-    for (i in 0 until size) {
+    var s = matrix[0][0]
+    var m = (x - interpolationNodes[0].first)
+    for (i in 1 until size) {
         s += m * matrix[0][i]
-        m *= (x - matrix[i][i])
+        m *= (x - interpolationNodes[i].first)
     }
     return s
 }
