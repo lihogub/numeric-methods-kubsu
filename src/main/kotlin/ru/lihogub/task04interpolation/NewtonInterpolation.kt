@@ -1,4 +1,4 @@
-package ru.lihogub.task04lagrangenewtoninterpolation
+package ru.lihogub.task04interpolation
 
 fun interpolateNewtonMethod(x: Double, interpolationNodes: List<Pair<Double, Double>>): Double {
     val size = interpolationNodes.size

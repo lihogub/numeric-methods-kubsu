@@ -1,4 +1,4 @@
-package ru.lihogub.task04lagrangenewtoninterpolation
+package ru.lihogub.task04interpolation
 
 fun interpolateLagrangeMethod(x: Double, interpolationNodes: List<Pair<Double, Double>>): Double {
     var s = 0.0
