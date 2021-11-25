@@ -52,7 +52,7 @@ fun interpolateSplineMethod(x: Double, interpolationNodes: List<Pair<Double, Dou
 //    println(vectorC)
 //    println(vectorD)
 
-    val idx = interpolationNodes.indexOfFirst { pair -> x < pair.first }
+    val idx = interpolationNodes.indexOfFirst { pair -> x <= pair.first }
     val offsetX = x - interpolationNodes[idx].first
     var result = vectorA[idx]
     result += offsetX *  vectorB[idx]

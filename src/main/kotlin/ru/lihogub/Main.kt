@@ -22,7 +22,7 @@ fun main() {
 
     val resultPointCount = 1000
 
-    val originalX = List(resultPointCount) { i -> lowerBound + i * (upperBound - lowerBound) / resultPointCount }
+    val originalX = List(resultPointCount) { i -> lowerBound + i * ((upperBound - lowerBound) / (resultPointCount - 1)) }
     val originalY = originalX.map { x -> func(x) }
     val lagrangeY = originalX.map { x -> interpolateLagrangeMethod(x, nodeList) }
     val newtonY = originalX.map { x -> interpolateNewtonMethod(x, nodeList) }
