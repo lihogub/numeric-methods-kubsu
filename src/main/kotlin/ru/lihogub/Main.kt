@@ -3,90 +3,81 @@ package ru.lihogub
 import jetbrains.letsPlot.geom.geomLine
 import jetbrains.letsPlot.ggsize
 import jetbrains.letsPlot.letsPlot
-import ru.lihogub.common.generateInterpolationNodes
-import ru.lihogub.task04interpolation.interpolateLagrangeMethod
-import ru.lihogub.task04interpolation.interpolateNewtonMethod
-import ru.lihogub.task04interpolation.interpolateSplineMethod
-import ru.lihogub.task05rootfinding.findRootsBisectionMethod
-import ru.lihogub.task05rootfinding.findRootsBisectionMethodRecursive
-import ru.lihogub.task05rootfinding.findRootsSecantMethod
+import org.jetbrains.kotlinx.multik.api.linspace
+import org.jetbrains.kotlinx.multik.api.mk
+import org.jetbrains.kotlinx.multik.ndarray.operations.toDoubleArray
+import ru.lihogub.task06integration.integrateRiemann
+import ru.lihogub.task06integration.integrateSimpson
+import ru.lihogub.task06integration.integrateTrapezoid
 import kotlin.math.*
 
 fun main() {
-    interpolationSpline()
-    rootFinding()
+    testMethods()
 }
 
-fun rootFinding() {
+fun testMethods() {
     val func: (Double) -> Double = { x -> sin(x) }
-    val epsilon = 1e-5
-    val lowerBound = 10.0
-    val upperBound = 30.0
-
-    val rootList = findRootsBisectionMethod(lowerBound, upperBound, epsilon, func)
-    println("Non-recursive method:")
-    println("Roots count: ${rootList.size}")
-    for (x in rootList) {
-        println("$x: ${func(x)}")
-    }
-
-    val rootListRecursive = findRootsBisectionMethodRecursive(lowerBound, upperBound, epsilon, func)
-    println("Recursive method:")
-    println("Roots count: ${rootListRecursive.size}")
-    for (x in rootListRecursive) {
-        println("$x: ${func(x)}")
-    }
-
-    val rootListSecant = findRootsSecantMethod(lowerBound, upperBound, epsilon, func)
-    println("Secant method:")
-    println("Roots count: ${rootListSecant.size}")
-    for (x in rootListSecant) {
-        println("$x: ${func(x)}")
-    }
-}
-
-fun interpolationSpline() {
-//    val func: (Double) -> Double = { x -> 1 + 1 * x + 1 * x * x + 1 * x * x * x }
-    val func: (Double) -> Double = { x -> abs(x) }
-    val nodesCount = 5
-    val lowerBound = -10.0
+    val epsilon = 10e-5
+    val lowerBound = 0.0
     val upperBound = 10.0
-    val nodeList = generateInterpolationNodes(nodesCount, lowerBound, upperBound) { _x -> func(_x) }
 
-    println(nodeList)
+    println("Riemann: " + computeSegments(epsilon, lowerBound, upperBound, func) {
+            a, b, n, f -> integrateRiemann(a, b, n, f)
+    })
+    println("Trapezoid: " + computeSegments(epsilon, lowerBound, upperBound, func) {
+            a, b, n, f -> integrateTrapezoid(a, b, n, f)
+    })
+    println("Simpson: " + computeSegments(epsilon, lowerBound, upperBound, func) {
+            a, b, n, f -> integrateSimpson(a, b, n, f)
+    })
 
-    val resultPointCount = 1000
+    val n = 1000
+    val originalX = mk.linspace<Double>(lowerBound, upperBound, 1000).toDoubleArray()
+    val riemannY = originalX.map { x -> integrateRiemann(lowerBound, x, n, func) }
+    val trapezoidY = originalX.map { x -> integrateTrapezoid(lowerBound, x, n, func) }
+    val simpsonY = originalX.map { x -> integrateSimpson(lowerBound, x, n, func) }
 
-    val originalX =
-        List(resultPointCount) { i -> lowerBound + i * ((upperBound - lowerBound) / (resultPointCount - 1)) }
-    val originalY = originalX.map { x -> func(x) }
-    val lagrangeY = originalX.map { x -> interpolateLagrangeMethod(x, nodeList) }
-    val newtonY = originalX.map { x -> interpolateNewtonMethod(x, nodeList) }
-    val splineY = originalX.map { x -> interpolateSplineMethod(x, nodeList) }
 
     val data = mapOf(
         "originalX" to originalX,
-        "originalY" to originalY,
-        "lagrangeY" to lagrangeY,
-        "newtonY" to newtonY,
-        "splineY" to splineY
+        "riemannY" to riemannY,
+        "trapezoidY" to trapezoidY,
+        "simpsonY" to simpsonY
     )
 
     val p = letsPlot(data) +
-            geomLine(color = "black") { x = "originalX"; y = "originalY"; } +
-            geomLine(color = "blue") { x = "originalX"; y = "newtonY"; } +
-            geomLine(color = "red") { x = "originalX"; y = "lagrangeY"; } +
-            geomLine(color = "green") { x = "originalX"; y = "splineY"; } +
+            geomLine(color = "black") { x = "originalX"; y = "riemannY"; } +
+            geomLine(color = "blue") { x = "originalX"; y = "trapezoidY"; } +
+            geomLine(color = "red") { x = "originalX"; y = "simpsonY"; } +
             ggsize(500, 250)
 
     p.show()
 
-    val maxDeltaNewton = originalY.zip(newtonY).maxOf { pair -> abs(pair.first - pair.second) }
-    val maxDeltaLagrange = originalY.zip(lagrangeY).maxOf { pair -> abs(pair.first - pair.second) }
-    val maxDeltaSpline = originalY.zip(splineY).maxOf { pair -> abs(pair.first - pair.second) }
+    val maxDeltaRiemannTrapezoid = riemannY.zip(trapezoidY).maxOf { pair -> abs(pair.first - pair.second) }
+    val maxDeltaRiemannSimpson = riemannY.zip(simpsonY).maxOf { pair -> abs(pair.first - pair.second) }
+    val maxDeltaTrapezoidSimpson = trapezoidY.zip(riemannY).maxOf { pair -> abs(pair.first - pair.second) }
 
     println("Max inaccurance:")
-    println("Lagrange: $maxDeltaLagrange")
-    println("Newton: $maxDeltaNewton")
-    println("Spline: $maxDeltaSpline")
+    println("Riemann Trapezoid: $maxDeltaRiemannTrapezoid")
+    println("Riemann Simpson: $maxDeltaRiemannSimpson")
+    println("Trapezoid Simpson: $maxDeltaTrapezoidSimpson")
+}
+
+fun computeSegments(
+    epsilon: Double,
+    lowerBound: Double,
+    upperBound: Double,
+    func: (Double) -> Double,
+    method: (Double, Double, Int, (Double) -> Double) -> Double
+): Int {
+    var segments = 4
+    var prevResult = method(lowerBound, upperBound, 2, func)
+    var currentResult = method(lowerBound, upperBound, 4, func)
+    while (abs(currentResult - prevResult) > epsilon) {
+        segments *= 2
+        prevResult = currentResult
+        currentResult = method(lowerBound, upperBound, segments, func)
+    }
+    println(currentResult)
+    return segments
 }
