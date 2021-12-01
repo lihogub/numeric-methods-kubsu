@@ -9,10 +9,12 @@ import org.jetbrains.kotlinx.multik.ndarray.operations.toDoubleArray
 import ru.lihogub.task06integration.integrateRiemann
 import ru.lihogub.task06integration.integrateSimpson
 import ru.lihogub.task06integration.integrateTrapezoid
+import ru.lihogub.task07diffeqsolver.solveDiffEquationRungeKuttaMethod
 import kotlin.math.*
 
 fun main() {
-    testMethods()
+//    testMethods()
+    testRungeKutta()
 }
 
 fun testMethods() {
@@ -80,4 +82,24 @@ fun computeSegments(
     }
     println(currentResult)
     return segments
+}
+
+fun testRungeKutta() {
+    val func: (Double, Double) -> Double = { x, y -> x }
+
+    val pointList = solveDiffEquationRungeKuttaMethod(0.0, 1.0, 10.0, 50, func)
+    val xList = pointList.map { it.first }
+    val yList = pointList.map { it.second }
+
+
+    val data = mapOf(
+        "xList" to xList,
+        "yList" to yList,
+    )
+
+    val p = letsPlot(data) +
+            geomLine(color = "black") { x = "xList"; y = "yList"; } +
+            ggsize(500, 250)
+
+    p.show()
 }
