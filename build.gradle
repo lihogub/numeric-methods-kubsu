@@ -1,0 +1,33 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.5.30'
+    id 'java'
+}
+
+group 'ru.lihogub'
+version '1.0'
+
+repositories {
+    mavenCentral()
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/multik-api
+    implementation 'org.jetbrains.kotlinx:multik-api:0.1.0'
+
+    implementation "org.jetbrains.kotlinx:multik-default:0.1.0"
+
+    implementation 'org.jetbrains.lets-plot:lets-plot-batik:2.0.4'
+    implementation 'org.jetbrains.lets-plot:lets-plot-kotlin-jvm:3.0.1'
+
+    implementation 'org.slf4j:slf4j-api:1.7.32'
+    implementation 'org.slf4j:slf4j-simple:1.7.32'
+}
+
+test {
+    useJUnitPlatform()
+}
